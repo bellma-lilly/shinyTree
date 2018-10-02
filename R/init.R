@@ -30,8 +30,16 @@ jsonToAttr <- function(json){
   if (! "text" %in% names(json)){
     # This is a top-level list, not a node.
     for (i in 1:length(json)){
-      ret[[json[[i]]$text]] <- jsonToAttr(json[[i]])
-      ret[[json[[i]]$text]] <- supplementAttr(ret[[json[[i]]$text]], json[[i]])
+      leafName = json[[i]]$text
+      if(leafName %in% names(ret)){
+        if(is.null(attr(ret[[leafName]],"count"))){
+          attr(ret[[leafName]],"count") <- 1
+        }
+        attr(ret[[leafName]],"count") <- attr(ret[[leafName]],"count") + 1
+      }else{
+        ret[[leafName]] <- jsonToAttr(json[[i]])
+        ret[[leafName]] <- supplementAttr(ret[[leafName]], json[[i]])
+      }
     }
     return(ret)
   }
@@ -69,3 +77,4 @@ supplementAttr <- function(ret, json){
   }
   ret
 }
+
