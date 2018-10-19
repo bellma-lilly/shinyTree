@@ -32,6 +32,7 @@ jsonToAttr <- function(json){
     for (i in 1:length(json)){
       leafName = json[[i]]$text
       if(leafName %in% names(ret)){
+        #keep track of duplicates of this subtree by incrementing count
         if(is.null(attr(ret[[leafName]],"count"))){
           attr(ret[[leafName]],"count") <- 1
         }
