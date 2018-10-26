@@ -25,8 +25,6 @@ Rlist2json <- function(nestedList) {
 
 get_flatList <- function(nestedList, flatList = NULL, parent = "#") {
   for (name in names(nestedList)) {
-    #browser()
-  
     additionalAttributes <- list(
       "icon" = fixIconName(attr(nestedList[[name]],"sticon")),
       "type" = attr(nestedList[[name]],"sttype")
