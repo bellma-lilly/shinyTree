@@ -57,6 +57,16 @@ var shinyTree = function(){
         var arrToObj = function(ar){
           var obj = {};
           $.each(ar, function(i, el){
+            //add the data for this node
+            var data = {}
+            $.each($('#tree').jstree(true).get_node(el.id).data, function(key, val){
+              if (typeof val === 'string'){
+                data[key] = val.trim();
+              } else {
+                data[key] = val; 
+              }
+            });
+            el.data = data;
             obj['' + i] = el;
           })
           return obj;
@@ -78,15 +88,10 @@ var shinyTree = function(){
                 }
               }
           });
-          //get the id and add the data
-          console.log(clean["id"]);
+          
           toReturn.push(clean);
         });
-        
         result = arrToObj(toReturn)
-        callbackCounter++;
-        result.callbackCounter = callbackCounter;
-
         return arrToObj(result);
       }
       
@@ -95,7 +100,9 @@ var shinyTree = function(){
         if(tree.get_container().find("li").length>0) { // The tree may be initialized but empty
           var js = tree.get_json();
           var fixed = fixOutput(js, ['id', 'state', 'text','children']);
-          return js;
+          callbackCounter++;
+          fixed.callbackCounter = callbackCounter;
+          return fixed;
         }
       }
     },
@@ -128,7 +135,6 @@ var shinyTree = function(){
     receiveMessage: function(el, message) {
       // This receives messages of type "updateTree" from the server.
       if(message.type == 'updateTree' && typeof message.data !== 'undefined') {
-          console.log($(el).jstree(true).settings.core.data);
           $(el).jstree(true).settings.core.data = JSON.parse(message.data);
           $(el).jstree(true).refresh(true, true);
       }
@@ -151,24 +157,6 @@ var shinyTree = function(){
       });
     });    
   }
-  
-  function process(key,value) {
-    if(key == "id"){
-      info = $('#tree').jstree(true).get_node(value).data
-      console.log(key + " : "+value)
-      console.log(info);
-    }
-  }
-
-  function traverse(o,func) {
-    for (var i in o) {
-        func.apply(this,[i,o[i]]);  
-        if (o[i] !== null && typeof(o[i])=="object") {
-            //going one step down in the object tree!!
-            traverse(o[i],func);
-        }
-    }
-}
-  
+ 
   return exports;
 }()

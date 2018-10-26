@@ -34,12 +34,13 @@ get_flatList <- function(nestedList, flatList = NULL, parent = "#") {
     additionalAttributes <- additionalAttributes[which(sapply(additionalAttributes,Negate(is.null)))]
     
     data <- lapply(names(attributes(nestedList[[name]])),function(key){
-      if(key %in% c("icon","type","names")){
+      if(key %in% c("icon","type","names","stopened","stselected","sttype")){
         NULL
       }else{
         attr(nestedList[[name]],key)
       }
     })
+    names(data) <- names(attributes(nestedList[[name]]))
     data <- data[which(sapply(data,Negate(is.null)))]
     
     nodeData <- append(
