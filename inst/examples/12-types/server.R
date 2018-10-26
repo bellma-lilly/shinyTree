@@ -18,7 +18,7 @@ shinyServer(function(input, output, session) {
             ),
         SubListB = structure(list(
           leafA = structure("",sttype="file"),
-          leafB = structure("",sttype="file")
+          leafB = structure("",sttype="file",extradaata = "123")
           ),stopened=TRUE,sttype="root")
       ),
       sttype="root",stopened=TRUE
@@ -32,5 +32,9 @@ shinyServer(function(input, output, session) {
   
   output$tree <- renderTree({
     treeData()
+  })
+  observe({
+    req(input$tree)
+    browser()
   })
 })
