@@ -11,13 +11,13 @@ shinyServer(function(input, output, session) {
       root1 = structure("", stselected=TRUE,sttype="root"),
       root2 = structure(list(
         SubListA = structure(list(
-            leaf1 = structure("",sttype="file"), 
-            leaf2 = structure("",sttype="file"),
-            leaf3 = structure("",sttype="file")),
+            leaf1 = structure("",sttype="file",stid="1 leaf"), 
+            leaf2 = structure("",sttype="file",stid="2 leaf"),
+            leaf3 = structure("",sttype="file",stid="3 leaf")),
             sttype="root",stopened=TRUE
             ),
         SubListB = structure(list(
-          leafA = structure("",sttype="file"),
+          leafA = structure("",sttype="file",stid="A leaf"),
           leafB = structure("",sttype="file",extradaata = "123")
           ),stopened=TRUE,sttype="root")
       ),
@@ -30,11 +30,12 @@ shinyServer(function(input, output, session) {
     updateTree(session, treeId = "tree", data = treeData())
   })
   
-  output$tree <- renderTree({
-    treeData()
-  })
+  #don't use renderTree
+  output$tree <- renderEmptyTree()
+  observe({    updateTree(session, treeId = "tree", data = treeData()) })
+
   observe({
     req(input$tree)
-    browser()
+    print(input$tree)
   })
 })
