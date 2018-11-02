@@ -27,7 +27,7 @@ initResourcePaths <- function() {
 
 jsonToAttr <- function(json){
   ret <- list()
-  if (! "text" %in% names(json)){
+  if (! "text" %in% names(json) && length(json) > 0){
     # This is a top-level list, not a node.
     for (i in 1:length(json)){
       leafName = json[[i]]$text
@@ -53,21 +53,23 @@ jsonToAttr <- function(json){
 
 supplementAttr <- function(ret, json){
   # Only add attributes if non-default
-  sapply(names(json$data),function(name){
-    attr(ret, name) <<- json$data[[name]]
-  })
-  
-  if (json$state$selected != FALSE){
-    attr(ret, "stselected") <- json$state$selected
-  }
-  if (json$state$disabled != FALSE){
-    attr(ret, "stdisabled") <- json$state$disabled
-  }
-  if (json$state$opened != FALSE){
-    attr(ret, "stopened") <- json$state$opened
-  }
-  if (exists('id', where=json)) {
-    attr(ret, "id") <- json$id
+  if(!is.null(ret)){
+      sapply(names(json$data),function(name){
+        attr(ret, name) <<- json$data[[name]]
+      })
+      
+      if (json$state$selected != FALSE){
+        attr(ret, "stselected") <- json$state$selected
+      }
+      if (json$state$disabled != FALSE){
+        attr(ret, "stdisabled") <- json$state$disabled
+      }
+      if (json$state$opened != FALSE){
+        attr(ret, "stopened") <- json$state$opened
+      }
+      if (exists('id', where=json)) {
+        attr(ret, "id") <- json$id
+      }
   }
   ret
 }
