@@ -38,8 +38,10 @@ get_flatList <- function(nestedList, flatList = NULL, parent = "#") {
         attr(nestedList[[name]],key)
       }
     })
-    names(data) <- names(attributes(nestedList[[name]]))
-    data <- data[which(sapply(data,Negate(is.null)))]
+    if(!is.null(data) && length(data) > 0){
+      names(data) <- names(attributes(nestedList[[name]]))
+      data <- data[which(sapply(data,Negate(is.null)))]
+    }
     
     nodeData <- append(
       list(
