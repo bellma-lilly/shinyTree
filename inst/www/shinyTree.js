@@ -1,6 +1,5 @@
 var shinyTree = function(){
   callbackCounter = 0;
-  sttypes = null;
 
   var treeOutput = new Shiny.OutputBinding();
   $.extend(treeOutput, {
@@ -32,7 +31,7 @@ var shinyTree = function(){
         "check_callback" : ($elem.data('st-dnd') === 'TRUE'), 
         'themes': {'name': $elem.data('st-theme'), 'responsive': true, 'icons': ($elem.data('st-theme-icons') === 'TRUE'), 'dots': ($elem.data('st-theme-dots') === 'TRUE') }
           },
-          "types" : sttypes,
+          "types" : window[el.id + "_sttypes"],
           plugins: plugins});
     }
   });
